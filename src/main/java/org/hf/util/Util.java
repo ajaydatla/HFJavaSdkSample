@@ -33,8 +33,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.bind.DatatypeConverter;
-
+import org.apache.commons.codec.binary.Base64;
 import org.hyperledger.fabric.sdk.exception.CryptoException;
 
 /**
@@ -128,7 +127,8 @@ public class Util {
 
 			certificate = new String(Files.readAllBytes(Paths.get(certFolderPath, certFileName)));
 
-			byte[] encoded = DatatypeConverter.parseBase64Binary(keyBuilder.toString());
+			byte[] encoded = Base64.decodeBase64(keyBuilder.toString());
+			
 			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
 			KeyFactory kf = KeyFactory.getInstance("ECDSA");
 			key = kf.generatePrivate(keySpec);
